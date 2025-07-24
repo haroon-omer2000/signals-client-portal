@@ -14,8 +14,10 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<EmailRes
       }
     }
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Acme <onboarding@resend.dev>'
+    
     const { data: result, error } = await resend.emails.send({
-      from: 'onboarding@yourdomain.com', // Replace with your verified domain
+      from: fromEmail,
       to: [data.to],
       subject: `Welcome to our Accountancy Firm, ${data.clientName}!`,
       html: generateWelcomeEmailHTML(data),
@@ -23,11 +25,15 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<EmailRes
 
     if (error) {
       console.error('Resend email error:', error)
+      console.error('From email:', fromEmail)
+      console.error('To email:', data.to)
       return {
         success: false,
         error: error.message || 'Failed to send email',
       }
     }
+
+    console.log('✅ Email sent successfully to:', data.to, 'Message ID:', result?.id)
 
     return {
       success: true,
