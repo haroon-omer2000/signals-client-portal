@@ -42,7 +42,7 @@ interface MantineProviderProps {
 
 export function CustomMantineProvider({ children }: MantineProviderProps) {
   return (
-    <MantineProvider theme={theme} defaultColorScheme="auto">
+    <MantineProvider theme={theme} defaultColorScheme="dark" forceColorScheme="dark">
       {children}
     </MantineProvider>
   )
